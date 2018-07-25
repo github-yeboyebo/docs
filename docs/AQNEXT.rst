@@ -40,75 +40,23 @@ Primeros pasos
     source bin/activate
     pip3 install django gunicorn psycopg2
 
-#. Tomar de subversion la aplicación AQNEXT(Ver :ref:`estructura-de-aplicacion`) debemos copiar la aplicacion siempre en una carpeta django dentro de nuestra home( /var/www/dev/django/aqnext )::
-
-    https://svn.yeboyebo.es/svn/aqnext/
+#. Copiar AQNEXT(Ver :ref:`estructura-de-aplicacion`) la aplicacion en /var/www/dev/django/aqnext
 
 #. Una vez tengamos la carpeta aqnext dentro de django podemos instalar en nuestor entorno virtual las librerias necesarias, estando en el raiz de django, activamos el entorno virutal si no lo tenemos ya(source bin/activate) y ejecutamos::
     
     pip install -r aqnext/motor/requirements.txt
 
-#. La aplicación en subversion no incluye las librerias externas(jquery,react,etc..) para poder instalarlas todas cómodamente en la raiz(AQNEXT) debería haber un fichero **package.json** y otro **requirements.txt**, con ellos podemos instalar todas las librerías necesarias para el funcionamiento de la aplicación ejecutando desde la raíz el comando::
-
-    django/aqnext/motor/YBCORE$ bower install
-    django/aqnext/motor$ pip install -r requirements.txt
-    django/aqnext/motor/YBCORE$ npm install
-
-Pero es mucho mas facil descargar el siguiente fichero de drive y descomprimirlo en django/aqnext/motor/YBCORE::
+#. La aplicación en subversion no incluye las librerias externas(jquery,react,etc..) para poder instalarlas todas cómodamente en la raiz(AQNEXT) debería haber un fichero **package.json** y otro **requirements.txt**, con ellos podemos instalar todas las librerías necesarias para el funcionamiento de la aplicación, pero es mucho mas facil descargar el siguiente fichero de drive y descomprimirlo en django/aqnext/motor/YBCORE::
 
     https://drive.google.com/open?id=1HNcbiyqD1Y_xDHsVmBs4y8ufWeVcwtI8
 
-#. Si vamos a trabajar con un cliente nuevo copiar la aplicación TEMPLATE ubicada en *AQNEXT/CLIENTES/* en el mismo directorio con el nombre del cliente XXXXX.
-
-#. Migrar los modelos y script que necesitemos para nuestra aplicación(Ver :ref:`herramientas-migracion`).
-
-#. Crear los formularios (Ver :ref:`formularios-aqnext`)
-
-#. Añadimos los formularios necesarios(Normalmente maestros) al menú (Ver :ref:`menu-aqnext`)
-
-#. Arrancamos nuestra la aplicación del cliente en desarrollo (Ver :ref:`ficheros-de-arranque`)
 
 .. _ficheros-de-arranque:
 
 Uso de ficheros SVN y arranque
 -------------------------------
 
-En la raíz(AQNEXT) del proyecto AQNEXT tenemos los siguientes ficheros::
-
-    apps.sh
-    status.sh
-    up.sh
-    add.sh
-    commit.sh
-    runserver.sh
-
-El fichero **apps.sh** recibe un parámetro y devuelve las aplicaciones o ficheros que deben estar sujetos a cambios::
-
-    Para núcleo general -- nucleo (ej: YBLEGACY)
-    Para núcleo web -- web (ej: YBWEB)
-    Para configuración, dependencias y svn -- config (ej: package.json)
-    Para todos los clientes -- fun
-    Para un cliente concreto -- nombre del cliente (ej: elganso)
-    Si no se le pasa parámetro sale de la aplicacion.
-
-El fichero **status.sh** recibe un parámetro, consigue mediante apps.sh las aplicaciones que deben consultarse y las comprueba con respecto al repositorio.
-Revierte los logs en caso de recibir las aplicaciones ajenas al núcleo.
-
-El fichero **up.sh** recibe un parámetro, consigue mediante apps.sh las aplicaciones que deben actualizarse y las recoge del repositorio.
-Revierte los logs en caso de recibir las aplicaciones ajenas al núcleo.
-
-El fichero **add.sh** recibe un parámetro, consigue mediante apps.sh las aplicaciones que deben añadirse y las sube al repositorio.
-Revierte los logs en caso de recibir las aplicaciones ajenas al núcleo.
-
-El fichero **commit.sh** recibe dos parámetros::
-
-    1 .- Consigue mediante apps.sh las aplicaciones que deben modificarse.
-    2 .- Si no existe o es true, añade los ficheros que no estén bajo mantenimiento de versiones.
-
-Sube las aplicaciones al repositorio.
-Revierte los logs en caso de recibir las aplicaciones ajenas al núcleo.
-
-El fichero **runserver.sh** recibe dos parámetros::
+En la raíz(AQNEXT) del proyecto AQNEXT tenemos el fichero **runserver.sh** recibe dos parámetros::
 
     1 .- El nombre de un cliente.
     2 .- El puerto de escucha.
@@ -124,30 +72,34 @@ Si no se le pasa puerto, coge por defecto el 8000.
 
 .. _estructura-de-aplicacion:
 
-Estructura de la aplicación
----------------------------
+Estructura de la aplicaciones de cliente
+----------------------------------------
 
 En el raíz de la aplicación tenemos los siguientes directorios:
 
 * AQNEXT: Configuración de django, el fichero mas interesante aquí es local.py donde indicaremos la base de datos y el cliente con que vamos a trabajar.
 
-* YBCORE: Aqui se aloja toda la funcionalidad para construir la parte de cliente(Llamadas AJAX, format, ReactJS...)
+* apps: Aqui se alojan todos los templates de las areas de la aplicación.
 
-* YBLEGACY: Núcleo de AbanQ traducido.
+* legacy: Scripts traducidos.
 
-* YBUTILS: Herramientas de django para el funcionamiento de la aplicación(REST, templatetags, logs, etc...)
+* config: Ficheros de configuracion del cliente, aqui se registran que tablas y scripts se van a traducir, asi como la informacion para traduccion de modelos y scripts::
 
-* YBLOGIN: Aquí se encuentra el índice de la aplicación, carga librerías y se encarga del login.
+    * dependencias.json: Debemos informar **fun_aq** con el nombre de nuestro cliente.
 
-* YBWEB: Incluye los ficheros para tratar JSON y el template general de la aplicación.
+    * registros.json: JSON con los scripts que se van a utilizar en la aplicación web.
 
-* assets: Archivos estáticos(Librerias js, css, imagenes, etc..)
+    * urls.json: JSON con los modelos/tablas que se van a utilizar en la aplicación web. Tambien se utiliza para registrar las aplicaciones virtuales.
 
-* CLIENTES: Aquí se desarrollaran las aplicaciones de los clientes, dentro de este directorio cada cliente dispondrá de una carpeta. Dentro de la carpeta de cada cliente estan sus módulos, cada modulo tiene dos partes por ejemplo **FACTURACION** esta dividido en:
-   
-    * FLFACTURAC: Donde guardaremos los modelos de facturación una vez traducidos los mtd, y también van aquí los ficheros .qs traducidos.
+* logs: Tres ficheros de logs::
 
-    * facturacion: Aquí es donde crearemos los ficheros JSON para los formularios, estos se ubicaran en facturacion/template/facturacion/plantillas/*.html, puede heredar de varios módulos oficiales esta parte vienen a ser las aplicaciones que tiene cada cliente.
+    * django.log: Log solo para desarrollo, en el se pueden ver todas las consultas a BBDD que se realizan en la aplicación.
+
+    * yebo.log: Log de aplicación, en el se capturan los errores de la aplicación, tambien podemos escribir en el con qsatype.debug("*")
+
+    * django.log: Log para despliegue.
+
+* models: Aqui se registran los scripts propios solo de la parte web de la aplicación.
 
 
 .. _formularios-aqnext:
@@ -156,7 +108,7 @@ Formularios AQNEXT
 ------------------
 
 Existen tres tipos de formularios por defecto que podemos definir para una tabla del modelo, aparte podemos también crear formularios personalizados.
-Los formularios se ubicaran dentro del directorio del cliente en el modulo que le corresponda, por ejemplo los formularios de *facturascli* para *ELGANSO* se ubicaran en **CLIENTES/ELGANSO/facturacion/templates/facturacion/plantillas/#formularios#.html**.
+Los formularios se ubicaran dentro del directorio del cliente en el modulo que le corresponda, por ejemplo los formularios de *facturascli* para *CLIENTE* se ubicaran en **CLIENTES/CLIENTE/facturacion/templates/facturacion/plantillas/#formularios#.html**.
 
 * *Formulario maestro:* Su nombre vendrá precedido por master, ejemplo *masterfacturascli.html*
 
@@ -183,9 +135,7 @@ Todos los formularios se invocaran a partir de su *url*, normalmente solo tendre
 Creación de Formularios AQNEXT
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. _jsonparser:  http://151.80.174.89/jsonparser/   
-
-Los formularios tienen formato JSON, para poder comprobar si estamos escribiendo correctamente el documento existe un validador de JSON en jsonparser_. Todos los formularios de AQNEXT sean del tipo que sean tienen la siguiente estructura basica::
+Los formularios tienen formato JSON. Todos los formularios de AQNEXT sean del tipo que sean tienen la siguiente estructura basica::
 
     {%comment%}
         (Opcional)
@@ -220,9 +170,9 @@ Los formularios tienen formato JSON, para poder comprobar si estamos escribiendo
         "lineasalbaranescli":{"rel":"idalbaran","querystring":{"p_l":50,"p_c":1}}
     }
 
-* **layout:** Esto es lo que realmente compone un formulario, aqui es donde se indicaran los componentes (Ver :ref:`componentes-aqnext`) que formaran nuestro formulario.
+* **layout:** Donde se indicaran los componentes (Ver :ref:`componentes-aqnext`) que formaran nuestro formulario.
 
-* **acciones:** Aquí indicaremos que acciones se invocaran desde los eventos del formulario, se pueden invocar acciones desde diferentes componentes(botones, iconos, tablas, etc..).(Ver :ref:`acciones-aqnext`)
+* **acciones:** Acciones que se invocaran desde los eventos del formulario, se pueden invocar acciones desde diferentes componentes(botones, iconos, tablas, etc..).(Ver :ref:`acciones-aqnext`)
 
 .. _componentes-aqnext:
 
@@ -295,7 +245,7 @@ Formularios de creación(create) o edición(update)::
 **Opcionales:**
 
 * **className:** Clases CSS para aplicar estilos personalizados.
-* **fields:**
+* **fields:** Campos que componen el formulario, pueden estar separados en Grupos("gb_nombregrupo"):
     #. *disabled*
     #. *desc*: Indicamos campo para buscar cuando se trata de campos relacionados que no esten indicados como ForeignField.
     #. *label*
@@ -485,7 +435,7 @@ Label
 Menus
 -----
 
-Los menús se definen con forma de JSON, existe un menú general en **CLIENTES/#####/portal/templates/portal/menu_portal.json**, el menu general es el primero que se muestra en la aplicacion, en este solo deberiamos añadir las aplicaciones del cliente, para ello indicamos la ubicacion del menu de cada aplicacion, ejemplo::
+Los menús se definen con forma de JSON, existe un menú general en **CLIENTES/#####/portal/templates/portal/menu_portal.json**, el menu general es el primero que se muestra en la aplicacion, ejemplo::
 
     {
         "items": [
@@ -540,7 +490,7 @@ Donde:
 Querystring
 -----------
 
-Querystring tiene los siguientes modificadores:
+Querystring permite hacer consultas a BBDD, tiene los siguientes modificadores:
    
     * **s_** , **q_**: El equivalente a un select, **s_** seria el equivalente a consultas con *AND* y **q_** a consultas con *OR*, esta formado por *s_campo__condicion:filtro*.
 
@@ -585,14 +535,6 @@ Acciones
 
 Se pueden invocar acciones desde diferentes eventos: botones, formularios, success(evento que se dispara al terminar correctamente una funcion), tablas, etc...
 
-Formularios
-~~~~~~~~~~~
-
-Estas son las diferentes acciones que podemos invocar desde los formularios:
-
-* **update:** Se invocara normalmente desde formularios para indicar que es un formulario de edicion.
-
-* **create:** Se invocara normalmente desde formularios para indicar que es un formulario de creacion.
 
 YBFielddb
 ~~~~~~~~~
@@ -654,7 +596,7 @@ General
 BufferCommited
 --------------
 
-Accion que se ejecutara al completar todo el proceso de commit de un formulario.
+Accion que se ejecutara al completar todo el proceso de commit de un formulario, se registra en la parte web de la aplicacion(models).
 
 
 
@@ -673,6 +615,16 @@ Podemos añadir campos relacionados directamente al modelo de nuestras apps(alma
 		#AQUI se pueden hacer las operaciones que necesitemos para retornar el campo.
         #model incluye los datos del campo
 		return 'calculate'
+
+Colores
+-------
+
+cPrimary: #5744DE
+cSuccess: #449D44
+cInfo: #31B0D5
+cDanger: #D32F2F
+cWarning: #EC971F
+cLink: #4478DE
 
 .. _filtrosserver-aqnext:
 
@@ -834,26 +786,3 @@ Ejemplo, filtro(en filtro indicamos campos de otros por lo que filtrar) con camp
 			}
 		}
 
-
-Envio de ficheros
------------------
-
-Para enviar un fichero en response hay que configurar bien la cabecera indicando el tipo de fichero::
-
-	import csv
-	 from django.http import HttpResponse 
-
-	response = HttpResponse(content_type='text/csv')
-	response['Content-Disposition'] = 'attachment; filename="nombrefichero.csv"'
-
-Despues hay que enviar el fichero en el response, se puede hacer con writer::
-
-	writer = csv.writer(response)
-	writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
-	writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
-
-O bien creamos el fichero desde una funcion externa y lo escribimos en reponse(y este sera el metodo normalmente utilizado)::
-
-	response.write(funcionquegenerefichero())
-
-Y ya solo habria que hacer un return response con lo que el navegador dara el fichero y preguntara si se quiere descargar o abrir
