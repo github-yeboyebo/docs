@@ -678,13 +678,13 @@ Tambien tenemos que añadir la funcion **initValidation**, la funcion retornara 
 Herramientas de migración
 -------------------------
 
-Disponemos de las herramientas para la migración automática de modelos y scrips(aqnext/mantver).
+Disponemos de las herramientas para la migración automática de modelos y scrips(**aqnext/mantver**).
 Este traductor toma los ficheros a traducir de los ficheros urls.json y registros.json.
 Para que funcionen correctamente las herramientas de traducción tendremos que activar el entorno virtual::
 
     source ../../bin/activate
 
-Para la traducción de scripts/modelos podemos usar el fichero devmantver.py, el cual recibe tres parametros, dos de ellos opcionales::
+Para la traducción de scripts/modelos podemos usar el fichero **devmantver.py**, el cual recibe tres parametros, dos de ellos opcionales:
 
     * Nombre de cliente(Obligatorio): -c nombrecliente
 
@@ -696,6 +696,16 @@ Para la traducción de scripts/modelos podemos usar el fichero devmantver.py, el
 Con el siguiente ejemplo se traducen todos los scripts/tablas del cliente tutorial, Ejemplo::
     
     python3 devmantver.py -c tutorial
+
+
+Otra herramienta util para la migracion de tablas es **generaModels.py**, el cual genera los ficheros necesarios para añadir funcionalidad web, con las funciones y estructura basica, el cual recibe un solo parametro:
+
+    * Nombre de cliente(Obligatorio): -c nombrecliente
+
+Con el siguiente ejemplo se crearan todos los ficheros necesarios para trabajar con las tablas del cliente tutorial, Ejemplo::
+    
+    python3 generaModels.py -c tutorial
+
 
 
 Existen una serie de Tags especiales para el preproceso que permiten impedir que el código pase a PYTHON::
