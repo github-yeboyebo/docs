@@ -46,7 +46,7 @@ Primeros pasos
     
     pip install -r aqnext/motor/requirements.txt
 
-#. La aplicación en subversion no incluye las librerias externas(jquery,react,etc..) para poder instalarlas todas cómodamente en la raiz(AQNEXT) debería haber un fichero **package.json** y otro **requirements.txt**, con ellos podemos instalar todas las librerías necesarias para el funcionamiento de la aplicación, pero es mucho mas fácil descargar el siguiente fichero de drive y descomprimirlo en django/aqnext/motor/YBCORE::
+#. La aplicación no incluye las librerias externas(jquery,react,etc..) para poder instalarlas todas cómodamente en la raiz(AQNEXT) debería haber un fichero **package.json** y otro **requirements.txt**, con ellos podemos instalar todas las librerías necesarias para el funcionamiento de la aplicación, pero es mucho mas fácil descargar el siguiente fichero de drive y descomprimirlo en django/aqnext/motor/YBCORE::
 
     https://drive.google.com/open?id=1HNcbiyqD1Y_xDHsVmBs4y8ufWeVcwtI8
 
@@ -72,10 +72,19 @@ Si no se le pasa puerto, coge por defecto el 8000.
 
 .. _estructura-de-aplicacion:
 
-Estructura de la aplicaciones de cliente
-----------------------------------------
+Estructura de la aplicacion
+---------------------------
 
 En el raíz de la aplicación tenemos los siguientes directorios:
+
+* clientes: Aqui se crean los nuevos clientes, para crear un nuevo cliente basta con hacer una copia de template y crear un nuevo fichero local.py
+
+* control: Herramientas para ayudar al desarrollo de aplicaciones.
+
+* mantver: Herramientas para ayudar a la traduccion de scripts/tablas.
+
+
+Dentro de la aplicación de cada cliente tenemos los siguientes directorios:
 
 * AQNEXT: Configuración de django, el fichero mas interesante aquí es local.py donde indicaremos la base de datos y el cliente con que vamos a trabajar.
 
@@ -485,6 +494,19 @@ Donde:
 #. **ICON:** Ver Iconos
 #. **COLOR:** Color del icono en dashboard.
 
+
+Aplicaciones virtuales de cliente
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Dentro de la carpeta app de cada cliente creamos las aplicaciones virtuales, las aplicaciones virtuales tienen acceso a todas las tablas y scripts de la aplicación, son una forma de poder tener una estructura de menus y navegación personalizada.
+
+Estructura de una aplicación virtual
+------------------------------------
+
+* templates: Aqui se almacenan, dentro de la carpeta plantillas, los templates, incluye el menu de la aplicacion virtual, siempre con el nombre menu_nombreaplicacion. Pueden almacenarse paginas HTML estaticas. 
+
+* viewset: Incluye el fichero views_nombreaplicacion, el cual permite realizar acciones sobre la aplicación virtual, tales como sobrecargar el login o cargar paginas estaticas.
+
 .. _querystring-aqnext:
 
 Querystring
@@ -603,7 +625,7 @@ Acción que se ejecutara al completar todo el proceso de commit de un formulario
 Campos Relacionados
 -------------------
 
-Podemos añadir campos relacionados directamente al modelo de nuestras apps(almacen,facturacion, o aplicaciones virtuales), para ello añadimos la funcion **getForeingFields** 
+Podemos añadir campos relacionados directamente al modelo de nuestras apps(almacen,facturacion, o aplicaciones virtuales), para ello añadimos la funcion **getForeingFields**::
 
 	def getForeingFields(self, model, template):
         #template indica quien llama al campo calculado(formRecord, master, template)
@@ -619,12 +641,18 @@ Podemos añadir campos relacionados directamente al modelo de nuestras apps(alma
 Colores
 -------
 
-cPrimary: #5744DE
-cSuccess: #449D44
-cInfo: #31B0D5
-cDanger: #D32F2F
-cWarning: #EC971F
-cLink: #4478DE
+* cPrimary: #5744DE
+
+* cSuccess: #449D44
+
+* cInfo: #31B0D5
+
+* cDanger: #D32F2F
+
+* cWarning: #EC971F
+
+* cLink: #4478DE
+
 
 .. _filtrosserver-aqnext:
 
