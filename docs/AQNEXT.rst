@@ -778,3 +778,36 @@ Ejemplo, filtro(en filtro indicamos campos de otros por lo que filtrar) con camp
 			}
 		}
 
+
+JASPER
+------
+
+Para poder visualizar informes en la aplicacion web utilizamos los informes Jasper.
+Descargamos e instalamos las herramientas de Jasper, actualmente utilizamos las versiones 6.2.1 de JasperReport Server::
+
+    https://community.jaspersoft.com/project/jasperreports-server/releases
+
+Y la version 5.5.0 de iReport::
+
+    https://community.jaspersoft.com/project/ireport-designer/releases
+
+
+JasperReport Server
+~~~~~~~~~~~~~~~~~~~
+
+Una vez instalado JasperReport Server este se ubica en **/opt**, el programa viene con un script **ctlscript.sh** que ayuda a arrancar la aplicación, una vez ejecutado el script solo hay que acceder a **127.0.0.1:8080/jasperserver**, por defecto tenemos el usuario **jasperadmin** contraseña **jasperadmin**.
+
+Antes de añadir un nuevo Report hay que tener en cuenta:
+
+* Si es un cliente nuevo hay que indicar la conexion con la base de datos como un nuevo *Origen de datos* en la carpeta *Data Sources*.
+
+* Los subreport deben tener como Subreport Expression: "repo:nombresubreport.jrxml".
+
+
+Para añadir un nuevo report:
+
+* Pulsar boton derecho sobre la carpeta **Reports** --> **Agregar recurso** --> **JasperReport**, hay que dar un nombre al report y seleccionar la ruta del fichero JRXML.
+
+* Indicar el **Origen de datos** en la pestaña correspondiente
+
+* Si el report tiene subreport hay que añadirlos desde la pestaña **Controles Recursos**
