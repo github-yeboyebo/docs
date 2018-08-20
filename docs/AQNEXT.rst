@@ -778,6 +778,37 @@ Ejemplo, filtro(en filtro indicamos campos de otros por lo que filtrar) con camp
 			}
 		}
 
+DRAWIF
+------
+
+drawIf se utiliza para interactuar con el template del cliente en funcion de los datos del servidor, permite deshabilitar u ocultar cualquier componente del template.
+Para utilizar drawIf debemos añadir una nueva propiedad al JSON debajo de acciones::
+
+        drawIf{
+            "layoutEnviar": {
+                "listoPDAButton": {
+                    "tipo": "disabled",
+                    "condiciones": [
+                        {
+                            "tipo": "!=",
+                            "campo": "pda",
+                            "valor": "Preparado"
+                        }
+                    ]
+                }
+            },
+            "gb__decondiciones": {
+                "decondiciones": "checkCondiciones"
+            }
+        }
+
+Existen dos tipos de drawIf:
+
+* Los que hacen las comprobaciones en el cliente, en cuyo caso debemos indicar el tipo de restriccion y las condiciones que deben cumplirse para ello.
+
+* Cuando necesitamos una consulta mas compleja podemos hacer las comprobaciones del lado del servidor, indicando la accion a ejecutar para realizar estas comprobaciones, la accion se creara en el script del template y debe devovler True, "disabled" o "hidden".
+
+
 
 JASPER
 ------
