@@ -707,10 +707,12 @@ Herramientas de migración
 -------------------------
 
 Disponemos de las herramientas para la migración automática de modelos y scrips(**aqnext/mantver**).
-Este traductor toma los ficheros a traducir de los ficheros urls.json y registros.json.
+Este traductor toma los ficheros a traducir de los ficheros **urls.json** y **registros.json**.
 Para que funcionen correctamente las herramientas de traducción tendremos que activar el entorno virtual::
 
     source ../../bin/activate
+
+Tambien es importante configurar el fichero **dependencias.json**, dentro del fichero en **fun_aq**, indicamos el nombre de la carpeta con la funcionalidad del cliente, esta carpeta tiene que estar en la **Home** de nuestro usuario.
 
 Para la traducción de scripts/modelos podemos usar el fichero **devmantver.py**, el cual recibe tres parametros, dos de ellos opcionales:
 
@@ -746,8 +748,6 @@ Existen una serie de Tags especiales para el preproceso que permiten impedir que
 Existe también un condicional para QSA con el que podemos indicar código que solo se ejecutara en django::
 
     if (sys.interactiveGUI() == "Django")
-
-Para poder utilizar el código legacy en una aplicación se seguirán los siguientes pasos:
 
 
 
@@ -811,3 +811,16 @@ Para añadir un nuevo report:
 * Indicar el **Origen de datos** en la pestaña correspondiente
 
 * Si el report tiene subreport hay que añadirlos desde la pestaña **Controles Recursos**
+
+
+JasperReport Server en AQNEXT
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Para poder cargar report de Jasper en AQNEXT tenemos que indicar los parametros de conexion con el servidor en el fichero **local.py** de nuestra aplicación de cliente::
+
+    JASPER_URL = 'http://127.0.0.1:8080/jasperserver'
+    JASPER_USER = 'jasperadmin'
+    JASPER_PASSWORD = 'jasperadmin'
+
+
+Para generar los report desde una tabla maestra
